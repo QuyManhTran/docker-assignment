@@ -71,7 +71,10 @@
     ]
   },
   "eslintConfig": {
-    "extends": "@adonisjs/eslint-config/app"
+    "extends": "@adonisjs/eslint-config/app",
+    "rules": {
+      "@typescript-eslint/no-shadow": "off"
+    }
   },
   "prettier": "@adonisjs/prettier-config"
 }
