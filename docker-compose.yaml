@@ -1,0 +1,40 @@
+version: '3.0'
+
+services:
+  myapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myapp
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - my-network
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:16.3-alpine3.20
+    container_name: postgres
+    env_file:
+      - path: .env
+        required: true
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_DB=${DB_DATABASE}
+    expose:
+      - ${DB_PORT}
+    networks:
+      - my-network
+    volumes:
+      - my-postgres-data:/var/lib/postgresql/data
+    secrets:
+      - postgres_password
+networks:
+  my-network:
+    driver: bridge
+volumes:
+  my-postgres-data:
+    driver: local
+secrets:
+  postgres_password:
+    file: postgres_password.txt
